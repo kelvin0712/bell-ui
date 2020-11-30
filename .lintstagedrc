@@ -1,0 +1,6 @@
+{
+    "**/*.{js,ts,tsx}": [
+      "prettier --write",
+      "npm run test:lint --fix"
+    ]
+}

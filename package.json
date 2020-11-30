@@ -6,18 +6,6 @@
   "scripts": {
     "test:lint": "eslint . --ext .js,.ts,.tsx"
   },
-  "lint-staged": {
-    "**/*.{js,ts,tsx}": [
-      "prettier --write",
-      "npm run test:lint --fix",
-      "git add"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kelvin0712/bell-ui.git"
