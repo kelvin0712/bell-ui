@@ -75,17 +75,49 @@ function variantGhost(colorScheme: string) {
   }
 }
 
+function variantOutline(colorScheme: string) {
+  return {
+    main: {
+      border: "1px solid",
+      borderColor:
+        colorScheme === "gray" ? theme.colors.gray[200] : theme.colors.current,
+      ...variantGhost(colorScheme).main,
+    },
+    hover: { ...variantGhost(colorScheme).hover },
+    active: { ...variantGhost(colorScheme).active },
+  }
+}
+
+function variantLink(colorScheme: string) {
+  return {
+    main: {
+      padding: 0,
+      height: "auto",
+      lineHeight: "normal",
+      color: theme.colors[colorScheme][500],
+      backgroundColor: "transparent",
+    },
+    hover: {
+      textDecoration: "underline",
+      boxShadow: "none",
+    },
+    active: {
+      color: theme.colors[colorScheme][700],
+    },
+  }
+}
+
 function variantSolid(colorScheme: string) {
   if (colorScheme === "gray") {
     return {
       main: {
-        background: theme.colors.gray[200],
+        backgroundColor: theme.colors.gray[200],
       },
       hover: {
-        background: theme.colors.gray[300],
+        backgroundColor: theme.colors.gray[300],
       },
       active: {
-        background: theme.colors.gray[400],
+        backgroundColor: theme.colors.gray[400],
       },
     }
   }
@@ -135,6 +167,8 @@ const ButtonStyles = ({
   const variants = {
     solid: variantSolid(colorScheme),
     ghost: variantGhost(colorScheme),
+    outline: variantOutline(colorScheme),
+    link: variantLink(colorScheme),
   }
 
   return {

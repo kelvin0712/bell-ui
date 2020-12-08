@@ -35,5 +35,11 @@ export const withVariant = () => (
     <Button colorScheme="teal" variant="solid">
       Button
     </Button>
+    <Button colorScheme="teal" variant="outline">
+      Button
+    </Button>
+    <Button colorScheme="teal" variant="link">
+      Button
+    </Button>
   </>
 )
