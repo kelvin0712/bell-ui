@@ -3,6 +3,7 @@ import { keyframes } from "@emotion/react"
 import styled from "@emotion/styled"
 import * as React from "react"
 import theme from "../../theme/units"
+import { get } from "../../utils"
 
 const sizes = {
   xs: {
@@ -53,10 +54,6 @@ const SpinnerStyles = ({
   size,
   color,
 }: SpinnerProps) => {
-  const mainColor = color?.split(".")[0]
-  const numberColor = color?.split(".")[1]
-  const mainEmptyColor = emptyColor?.split(".")[0]
-  const numberEmptyColor = emptyColor?.split(".")[1]
   return {
     display: "inline-block",
     borderColor: "currentColor",
@@ -64,16 +61,11 @@ const SpinnerStyles = ({
     borderRadius: "99999px",
     borderWidth: thickness,
     borderBottomColor: emptyColor
-      ? theme.colors[`${mainEmptyColor}`][numberEmptyColor]
+      ? get(theme.colors, emptyColor)
       : "transparent",
-    borderLeftColor: emptyColor
-      ? theme.colors[`${mainEmptyColor}`][numberEmptyColor]
-      : "transparent",
+    borderLeftColor: emptyColor ? get(theme.colors, emptyColor) : "transparent",
     animation: `${spin} ${speed} linear infinite`,
-    color:
-      color && numberColor
-        ? theme.colors[`${mainColor}`][numberColor]
-        : theme.colors[`${color}`],
+    color: color && get(theme.colors, color),
     ...sizes[`${size}`],
   }
 }
