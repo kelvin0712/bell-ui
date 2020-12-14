@@ -2,6 +2,7 @@ import isPropValid from "@emotion/is-prop-valid"
 import styled from "@emotion/styled"
 import * as React from "react"
 import theme from "../../theme/units"
+import Spinner from "../Spinner/Spinner"
 
 type ButtonSize = {
   fontSize?: string
@@ -143,15 +144,64 @@ function variantSolid(colorScheme: string) {
   }
 }
 
+// Button Spinner
+interface ButtonSpinnerProps {
+  label?: string
+  spacing?: string
+  children?: React.ReactNode
+  className?: string
+}
+
+const ButtonSpinnerStyles = styled.div(
+  {
+    display: "flex",
+    alignItems: "center",
+    marginRight: 0,
+  },
+  ({ label, spacing }: any) => ({
+    position: label ? "relative" : "absolute",
+    marginRight: label ? spacing : 0,
+  }),
+)
+
+const ButtonSpinner = ({
+  label,
+  children = <Spinner color="currentColor" size="sm" />,
+  className,
+  spacing,
+  ...rest
+}: ButtonSpinnerProps) => {
+  return (
+    <ButtonSpinnerStyles
+      className={className}
+      {...rest}
+      label={label}
+      spacing={spacing}
+    >
+      {children}
+    </ButtonSpinnerStyles>
+  )
+}
+
+if (process.env.NODE_ENV !== "production") {
+  ButtonSpinner.displayName = "ButtonSpinner"
+}
+
+// Button
 interface ButtonProps {
   colorScheme?: string
   enableElevation?: boolean
   size?: string
   variant?: string
   isDisabled?: boolean
+  isLoading?: boolean
   type?: "button" | "reset" | "submit"
   className?: string
   children: React.ReactNode
+  spinner?: React.ReactElement
+  loadingText?: string
+  iconSpacing?: string
+  disabled?: boolean
 }
 
 const ButtonStyles = ({
@@ -159,7 +209,7 @@ const ButtonStyles = ({
   enableElevation,
   size = "md",
   variant = "solid",
-  isDisabled,
+  disabled,
 }: ButtonProps) => {
   const fontSizeBySize = buttonSizeProps[size].fontSize
   const paddingBySize = buttonSizeProps[size].padding
@@ -184,7 +234,7 @@ const ButtonStyles = ({
     outline: "none",
     fontWeight: 500,
     cursor: "pointer",
-    opacity: isDisabled && 0.7,
+    opacity: disabled && 0.7,
     padding: paddingBySize,
     fontSize: fontSizeBySize,
     borderRadius: theme.radius.md,
@@ -195,12 +245,12 @@ const ButtonStyles = ({
     boxSizing: "border-box",
     ...(variant && variants[variant]?.main),
 
-    "&:hover": !isDisabled && {
+    "&:hover": !disabled && {
       boxShadow: theme.shadows.md,
       ...(variant && variants[variant]?.hover),
     },
 
-    "&:active": !isDisabled && {
+    "&:active": !disabled && {
       ...(variant && variants[variant]?.active),
     },
 
@@ -210,25 +260,6 @@ const ButtonStyles = ({
   }
 }
 
-const ButtonElement = React.forwardRef(function Button(
-  props: ButtonProps,
-  ref: React.Ref<HTMLButtonElement>,
-) {
-  const { isDisabled, type, className, children, ...rest } = props
-
-  return (
-    <button
-      ref={ref}
-      className={className}
-      disabled={isDisabled}
-      type={type}
-      {...rest}
-    >
-      {children}
-    </button>
-  )
-})
-
 const IGNORED_PROPS = ["color"]
 
 const buttonConfig = {
@@ -236,8 +267,46 @@ const buttonConfig = {
     isPropValid(prop) && !IGNORED_PROPS.includes(prop),
 }
 
-export const Button = styled(ButtonElement, buttonConfig)(ButtonStyles)
+const StyledButton = styled("button", buttonConfig)(ButtonStyles)
+
+const Button = React.forwardRef(function Button(
+  props: ButtonProps,
+  ref: React.Ref<HTMLButtonElement>,
+) {
+  const {
+    isDisabled,
+    isLoading,
+    type,
+    spinner,
+    loadingText,
+    iconSpacing = "0.5rem",
+    className,
+    children,
+    ...rest
+  } = props
+
+  return (
+    <StyledButton
+      ref={ref}
+      className={className}
+      disabled={isDisabled || isLoading}
+      type={type}
+      {...rest}
+    >
+      {isLoading && (
+        <ButtonSpinner label={loadingText} spacing={iconSpacing}>
+          {spinner}
+        </ButtonSpinner>
+      )}
+      {isLoading
+        ? loadingText || <span style={{ opacity: 0 }}>{children}</span>
+        : children}
+    </StyledButton>
+  )
+})
 
 if (process.env.NODE_ENV !== "production") {
   Button.displayName = "Button"
 }
+
+export default Button

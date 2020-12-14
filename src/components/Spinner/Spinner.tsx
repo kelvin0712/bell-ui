@@ -70,7 +70,10 @@ const SpinnerStyles = ({
       ? theme.colors[`${mainEmptyColor}`][numberEmptyColor]
       : "transparent",
     animation: `${spin} ${speed} linear infinite`,
-    color: color && theme.colors[`${mainColor}`][numberColor],
+    color:
+      color && numberColor
+        ? theme.colors[`${mainColor}`][numberColor]
+        : theme.colors[`${color}`],
     ...sizes[`${size}`],
   }
 }
@@ -87,4 +90,6 @@ const spinenrConfig = {
   shouldForwardProp: (prop: string) => isPropValid(prop),
 }
 
-export const Spinner = styled(SpinnerElement, spinenrConfig)(SpinnerStyles)
+const Spinner = styled(SpinnerElement, spinenrConfig)(SpinnerStyles)
+
+export default Spinner

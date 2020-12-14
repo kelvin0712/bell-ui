@@ -1,0 +1,16 @@
+{
+  "comments": false,
+  "plugins": [["@babel/plugin-proposal-class-properties", { "loose": true }]],
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "loose": true,
+        "modules": false,
+        "shippedProposals": true
+      }
+    ],
+    "@babel/preset-typescript",
+    "@babel/preset-react"
+  ]
+}

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Button } from "./Button"
+import Button from "./Button"
 
 export default {
   title: "Button",
@@ -42,4 +42,10 @@ export const withVariant = () => (
       Button
     </Button>
   </>
+)
+
+export const withLoading = () => (
+  <Button size="md" isLoading colorScheme="teal" loadingText="test" isDisabled>
+    Email
+  </Button>
 )
