@@ -24,7 +24,7 @@ export const size = () => (
 
 export const basic = () => (
   <Spinner
-    thickness="4px"
+    thickness="5px"
     speed="0.65s"
     emptyColor="gray.200"
     color="blue.500"

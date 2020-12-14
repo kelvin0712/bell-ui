@@ -70,18 +70,18 @@ const SpinnerStyles = ({
   }
 }
 
-const SpinnerElement = React.forwardRef(function Spinner(
-  props: SpinnerProps,
-  ref: React.Ref<HTMLDivElement>,
-) {
-  const { className, ...rest } = props
-  return <div ref={ref} className={className} {...rest} />
-})
-
 const spinenrConfig = {
   shouldForwardProp: (prop: string) => isPropValid(prop),
 }
 
-const Spinner = styled(SpinnerElement, spinenrConfig)(SpinnerStyles)
+const StyledSpinner = styled("div", spinenrConfig)(SpinnerStyles)
+
+const Spinner = React.forwardRef(function Spinner(
+  props: SpinnerProps,
+  ref: React.Ref<HTMLDivElement>,
+) {
+  const { className, ...rest } = props
+  return <StyledSpinner ref={ref} className={className} {...rest} />
+})
 
 export default Spinner
