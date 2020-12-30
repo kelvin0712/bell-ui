@@ -1,5 +1,7 @@
 import * as React from "react"
 import Button from "./Button"
+import { EmailIcon } from "../Icons/Email"
+import { PhoneIcon } from "../Icons/Phone"
 
 export default {
   title: "Button",
@@ -48,4 +50,15 @@ export const withLoading = () => (
   <Button size="md" isLoading colorScheme="teal" loadingText="test" isDisabled>
     Email
   </Button>
+)
+
+export const withIcon = () => (
+  <>
+    <Button leftIcon={<EmailIcon />} colorScheme="teal">
+      Email
+    </Button>
+    <Button rightIcon={<PhoneIcon />} colorScheme="pink" variant="outline">
+      Call me
+    </Button>
+  </>
 )

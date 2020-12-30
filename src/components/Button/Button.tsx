@@ -149,7 +149,6 @@ interface ButtonSpinnerProps {
   label?: string
   spacing?: string
   children?: React.ReactNode
-  className?: string
 }
 
 const ButtonSpinnerStyles = styled.div(
@@ -164,20 +163,14 @@ const ButtonSpinnerStyles = styled.div(
   }),
 )
 
-const ButtonSpinner = ({
+const ButtonSpinner: React.FC<ButtonSpinnerProps> = ({
   label,
   children = <Spinner color="currentColor" size="sm" />,
-  className,
   spacing,
   ...rest
-}: ButtonSpinnerProps) => {
+}) => {
   return (
-    <ButtonSpinnerStyles
-      className={className}
-      {...rest}
-      label={label}
-      spacing={spacing}
-    >
+    <ButtonSpinnerStyles {...rest} label={label} spacing={spacing}>
       {children}
     </ButtonSpinnerStyles>
   )
@@ -185,6 +178,27 @@ const ButtonSpinner = ({
 
 if (process.env.NODE_ENV !== "production") {
   ButtonSpinner.displayName = "ButtonSpinner"
+}
+
+// Button Icon
+
+const ButtonIcon: React.FC<any> = ({ className, children, ...rest }) => {
+  const _children = React.isValidElement(children)
+    ? React.cloneElement(children, {
+        "aria-hidden": true,
+        focusable: false,
+      } as any)
+    : children
+
+  return (
+    <span {...rest} className={className}>
+      {_children}
+    </span>
+  )
+}
+
+if (process.env.NODE_ENV !== "production") {
+  ButtonIcon.displayName = "ButtonIcon"
 }
 
 // Button
@@ -202,6 +216,8 @@ interface ButtonProps {
   loadingText?: string
   iconSpacing?: string
   disabled?: boolean
+  leftIcon?: React.ReactElement
+  rightIcon?: React.ReactElement
 }
 
 const ButtonStyles = ({
@@ -282,6 +298,8 @@ const Button = React.forwardRef(function Button(
     iconSpacing = "0.5rem",
     className,
     children,
+    rightIcon,
+    leftIcon,
     ...rest
   } = props
 
@@ -293,6 +311,9 @@ const Button = React.forwardRef(function Button(
       type={type}
       {...rest}
     >
+      {leftIcon && !isLoading && (
+        <ButtonIcon style={{ marginRight: iconSpacing }}>{leftIcon}</ButtonIcon>
+      )}
       {isLoading && (
         <ButtonSpinner label={loadingText} spacing={iconSpacing}>
           {spinner}
@@ -301,6 +322,9 @@ const Button = React.forwardRef(function Button(
       {isLoading
         ? loadingText || <span style={{ opacity: 0 }}>{children}</span>
         : children}
+      {rightIcon && !isLoading && (
+        <ButtonIcon style={{ marginLeft: iconSpacing }}>{rightIcon}</ButtonIcon>
+      )}
     </StyledButton>
   )
 })
